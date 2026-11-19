@@ -585,7 +585,7 @@ function contactDirect(){
 function contactForm(){
   var C=S.contact;
   var subj='<input id="m-subject" name="subject" value="'+esc(contactSubject)+'" placeholder="'+esc(C.subjectPh)+'">';
-  return ''+'<form class="f" id="f-contact"><h2>'+ed('contact.formTitle')+'</h2><div class="row2">'+lab('m-name','contact.fName','<input id="m-name" name="name" required autocomplete="name">')+lab('m-email','contact.fEmail','<input id="m-email" name="email" type="email" required autocomplete="email">')+'</div>'
+  return ''+'<form class="f" id="f-contact" action="https://formsubmit.co/af481984de871e19033106093c233652" method="POST"><input type="hidden" name="_subject" value="New website inquiry"><input type="hidden" name="_template" value="table"><input type="hidden" name="_captcha" value="false"><h2>'+ed('contact.formTitle')+'</h2><div class="row2">'+lab('m-name','contact.fName','<input id="m-name" name="name" required autocomplete="name">')+lab('m-email','contact.fEmail','<input id="m-email" name="email" required type="email" autocomplete="email">')+'</div>'
   +lab('m-subject','contact.fSubject',subj,edit?'<p class="small muted">Example text shown in the empty box: '+ed('contact.subjectPh','span')+'</p>':'')
   +lab('m-msg','contact.fMessage','<textarea id="m-msg" name="msg" required></textarea>')
   +btn('contact.formBtn','#','primary','submit')+'<div id="res-contact"></div></form>';
@@ -819,7 +819,7 @@ document.addEventListener('submit',function(e){
   if(f.id==='f-contact'){
     var cb=f.querySelector('[type=submit]'),cr=f.querySelector('#res-contact');if(cb)cb.disabled=true;mailWhy='';
     fetch('https://formsubmit.co/ajax/af481984de871e19033106093c233652',{method:'POST',headers:{'Content-Type':'application/json','Accept':'application/json'},body:JSON.stringify({_subject:'New message: '+(g('subject')||'from '+g('name')),_template:'table',_captcha:'false',Name:g('name'),Email:g('email'),Subject:g('subject'),Message:g('msg'),_replyto:g('email')})}).then(function(r){if(!r.ok){mailWhy='HTTP '+r.status;throw new Error('mail')};return r.json().catch(function(){return{}})}).then(function(j){if(j&&(j.success===false||j.success==='false')){mailWhy=String(j.message||'rejected by the mail service');throw new Error('mail')};
-      f.reset();if(cb)cb.disabled=false;if(cr)cr.innerHTML='<div class="result"><p><b>Thank you for reaching out.</b> We have received your message and look forward to connecting with you soon.</p></div>'}).catch(function(){if(cb)cb.disabled=false;if(cr)cr.innerHTML='<div class="result"><p>Sorry, your message could not be sent. Please email <a href="mailto:'+esc(S.site.email)+'">'+esc(S.site.email)+'</a>.</p><p class="hint">Details: '+esc(mailWhy||'could not reach the mail service')+'</p></div>'});
+      f.reset();if(cb)cb.disabled=false;if(cr)cr.innerHTML='<div class="result"><p><b>We have received your inquiry.</b> Our team will reach out to you soon.</p></div>'}).catch(function(){if(cb)cb.disabled=false;if(cr)cr.innerHTML='<div class="result"><p>Sorry, your inquiry could not be sent. Please email <a href="mailto:'+esc(S.site.email)+'">'+esc(S.site.email)+'</a>.</p><p class="hint">Details: '+esc(mailWhy||'could not reach the mail service')+'</p></div>'});
   }else if(f.id==='f-order'){
     if(orderStatus==='sending')return;
     var its=cartItems();if(!its.length)return;
